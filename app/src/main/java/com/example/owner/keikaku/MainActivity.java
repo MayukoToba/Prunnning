@@ -1,11 +1,13 @@
 package com.example.owner.keikaku;
 
+import android.content.res.Configuration;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -16,9 +18,10 @@ public class MainActivity extends AppCompatActivity {
     SubjectAdapter mSubjectAdapter;
     ListView mlistView;
 
-    private ActionBarDrawerToggle mDrawerToggle;
-    private DrawerLayout mDrawer;
 
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private Toolbar mToolbar;
 
 
     @Override
@@ -34,51 +37,50 @@ public class MainActivity extends AppCompatActivity {
         mSubjectAdapter = new SubjectAdapter(this,R.layout.card,mstring);
         mlistView.setAdapter(mSubjectAdapter);
 
-        //(Button)findViewById(R.id.drawer_button)).setOnClickListener(this);
 
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawer,
-                R.drawable.ic_drawer, R.string.drawer_open,
-                R.string.drawer_close) {
-            @Override
+        mToolbar = (Toolbar) findViewById(R.id.tool_bar);
+        setSupportActionBar(mToolbar);
+
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close){
+
             public void onDrawerClosed(View drawerView) {
             }
 
-            @Override
+
             public void onDrawerOpened(View drawerView) {
 
             }
-
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-                // ActionBarDrawerToggleクラス内の同メソッドにてアイコンのアニメーションの処理をしている。
-                // overrideするときは気を付けること。
-                super.onDrawerSlide(drawerView, slideOffset);
-
-            }
-
-            @Override
-            public void onDrawerStateChanged(int newState) {
-                // 表示済み、閉じ済みの状態：0
-                // ドラッグ中状態:1
-                // ドラッグを放した後のアニメーション中：2
-
-            }
         };
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+    }
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
 
-        mDrawer.setDrawerListener(mDrawerToggle);
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        // Pass any configuration change to the drawer toggle
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
 
-        // UpNavigationアイコン(アイコン横の<の部分)を有効に
-        // NavigationDrawerではR.drawable.drawerで上書き
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        // UpNavigationを有効に
-        getActionBar().setHomeButtonEnabled(true);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
 
-
-
-
+        return super.onOptionsItemSelected(item);
+    }
 
 
 
     }
-}
+
