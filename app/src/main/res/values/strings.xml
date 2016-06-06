@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Keikaku</string>
+
+    <!--subject name-->
+    <string name="math_title">数学</string>
+
+    <!--ナビゲゲーションドロワー-->
+
+</resources>
